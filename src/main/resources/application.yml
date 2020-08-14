@@ -1,0 +1,90 @@
+server.port: 8080
+server.error.include-stacktrace: never
+server.servlet:
+  context-path: /ny_trips
+  compression:
+    enabled: true
+    mime-types: application/json,application/error+json
+---
+spring:
+  profiles:
+    active: local
+  jackson:
+    default-property-inclusion: NON_NULL
+    serialization:
+      write_dates_as_timestamps: false
+      fail-on-empty-beans: false
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+server:
+  tomcat:
+    basedir: .
+    accesslog:
+      directory: logs
+
+---
+swagger:
+  host: localhost
+  protocols:
+    - http
+    - https
+  api_title: NY Trips API
+  api_description: Api Documentation for NY Trips API
+  api_version: v1
+  terms_of_service_url: 
+  business_owner_key: x-businessOwner
+  technical_owner_key: x-technicalOwner
+  name_key: name
+  email_key: email
+  business_owner_name: Amit Kumar
+  business_owner_email: kamit28@gmail.com
+  technical_owner_name: Amit Kumar
+  technical_owner_email: kamit28@gmail.com
+  license: Apache 2.0
+  license_url: http://www.apache.org/licenses/LICENSE-2.0
+
+---
+spring.profiles: local
+
+# Mysql configurations
+datasource:
+  driverClassName: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/ny_cabs?useUnicode=true&characterEncoding=UTF8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+  username: amit
+  password: daz9noSa!
+
+# Redis configurations
+redis:
+  database: 0
+  host: 127.0.0.1
+  port: 6379
+  password:
+  pool:
+    max-active: 1000
+    max-wait: -1
+    max-idle: 8
+    min-idle: 0
+  timeout: 0
+  
+# JPA
+jpa:
+  database: MYSQL
+  show-sql: true
+  hibernate:
+    ddl-auto: create-drop
+  database-platform: MYSQL
+  properties:
+    hibernate:
+      dialect: org.hibernate.dialect.MySQL5Dialect
+---
+logging:
+  pattern:
+    console: "%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n"
+    file: "%d %-5level [%thread] %logger{0} : %msg%n"
+  level:
+    root: INFO
+    com.dr.assignment: DEBUG
+    org.springframework.web: INFO
+    org:
+      hibernate.SQL: DEBUG
+ 
