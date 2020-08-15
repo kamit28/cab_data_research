@@ -1,14 +1,29 @@
-This API reads the source text file and builds a frequency table on initialization and provides following API endpoints to work on that data:
-1. 
-2. 
+# Cab Data Researcher API
+__Description__
 
-<ol>
-<li>
-/search: This method accepts a list of words to be searched and returns the count of occurances of each word in the text. This endpoint can be accessed using curl command as follows:
-<p>curl http://localhost:8080/counter-api/search -H"Authorization: Basic b3B0dXM6Y2FuZGlkYXRlcw==" -d'{"searchText":["Duis", "Sed", "Donec", "Augue", "Pellentesque", "123"]}' -H"Content-Type: application/json" -X POST</p>
-</li>
-<li>
-/top/{num}: This method returns the top ${num} frequently occuring words in the text in pipe-delemitted format. This endpoint can be accessed using curl command as follows:
-<p>curl http://localhost:8080/counter-api/top/20 -H"Authorization: Basic b3B0dXM6Y2FuZGlkYXRlcw==" -H"Accept: text/plain"</p>
-</li>
-</ol>
+This application provides the REST API end-points to analyze NY cab trips.<br>
+
+The application provides following two end-points:<br>
+ 1. /search?useCache={useCache}<br>
+ 	- url: ``http://localhost:8080/ny_trips/search?useCache=true``<br>
+ 	- Sample request JSON:<br>
+ ```json
+ {"tripBookings":[
+    {
+        "medallion": "",
+        "pickUpDate": "2013-12-06"
+    }
+]}
+```
+ 2. /admin/flushCache
+ <p></p>
+
+__Build__
+<br>To build the executable Jar, run the following maven command in the project root directory:<br>
+``$ mvn clean package``
+
+It will create a jar cab_data_client.jar in <project root>/target directory.<br>
+
+__Run__
+<br>To run the program:<br>
+``$ mvn spring-boot:run``
