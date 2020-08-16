@@ -50,8 +50,8 @@ spring.profiles: local
 datasource:
   driverClassName: com.mysql.cj.jdbc.Driver
   url: jdbc:mysql://localhost:3306/ny_cabs?useUnicode=true&characterEncoding=UTF8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-  username: amit
-  password: daz9noSa!
+  username: user
+  password: password
 
 # Redis configurations
 redis:

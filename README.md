@@ -6,6 +6,9 @@ This application provides the REST API end-points to analyze NY cab trips.<br>
 The application provides following two end-points:<br>
  > 1. /search?useCache={useCache}<br>
  	- url: ``http://localhost:8080/ny_trips/search?useCache=true``<br>
+ 	or
+ 		``http://localhost:8080/ny_trips/search?useCache=false``
+ 	The request parameter 'usecache' determines that the data will be pulled from cache (useCache=true) or the database (useCache=false)
  	- Sample request JSON:<br>
  	
 ```
