@@ -49,5 +49,9 @@ __Build__
 It will create a jar cab_data_client.jar in <project root>/target directory.<br>
 
 __Run__
+Make sure that:
+> 1. MySql Server is up and running. Also make sure that the database ny_cabs is created on the DB server and table cab_trip_data has been loaded from the SQL dump file.
+> 2. Redis Server is up and running
+
 <br>To run the program:<br>
 ``$ mvn spring-boot:run``
