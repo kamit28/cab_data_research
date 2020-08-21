@@ -14,22 +14,21 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
 @EnableJpaRepositories("com.dr.assignment.repository")
-@EntityScan(basePackageClasses = {Jsr310JpaConverters.class}, basePackages = {"com.dr.assignment.entity"})
+@EntityScan(basePackageClasses = { Jsr310JpaConverters.class }, basePackages = { "com.dr.assignment.entity" })
 @ConfigurationProperties(prefix = "jpa")
 public class JpaConfig {
-	
 	@Autowired
-    private Environment env;
-
+	private Environment env;
 
 	@Bean
-    public DataSource dataSource() {
-        final DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(env.getProperty("datasource.driverClassName"));
-        dataSource.setUrl(env.getProperty("datasource.url"));
-        dataSource.setUsername(env.getProperty("datasource.username"));
-        dataSource.setPassword(env.getProperty("datasource.password"));
+	public DataSource dataSource() {
+		final var dataSource = new DriverManagerDataSource();
+		dataSource.setDriverClassName(env.getProperty("datasource.driverClassName"));
+		dataSource.setUrl(env.getProperty("datasource.url"));
+		dataSource.setUsername(env.getProperty("datasource.username"));
+		dataSource.setPassword(env.getProperty("datasource.password"));
 
-        return dataSource;
-    }
+		return dataSource;
+	}
+
 }

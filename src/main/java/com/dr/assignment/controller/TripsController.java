@@ -1,7 +1,5 @@
 package com.dr.assignment.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dr.assignment.model.TripBooking;
 import com.dr.assignment.model.TripSearchRequest;
 import com.dr.assignment.model.TripSearchResponse;
 import com.dr.assignment.service.TripSearchService;
@@ -38,9 +35,9 @@ public class TripsController {
 			@RequestParam(required = false) boolean useCache) throws Exception {
 		log.info("Request received: " + tripSearchRequest.toString());
 
-		List<TripBooking> tripBookings = tripSearchService.search(tripSearchRequest.getTripBookings(), useCache);
+		var tripBookings = tripSearchService.search(tripSearchRequest.getTripBookings(), useCache);
 
-		TripSearchResponse response = new TripSearchResponse(tripBookings);
+		var response = new TripSearchResponse(tripBookings);
 
 		return ResponseEntity.ok(response);
 	}

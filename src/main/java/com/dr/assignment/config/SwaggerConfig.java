@@ -69,7 +69,7 @@ public class SwaggerConfig {
 
 	@SuppressWarnings("rawtypes")
 	private ApiInfo apiInfo() {
-		List<VendorExtension> vendorExtensions = new ArrayList<>();
+		var vendorExtensions = new ArrayList<VendorExtension>();
 
 		var businessOwner = new ObjectVendorExtension(businessOwnerKey);
 		businessOwner.addProperty(new StringVendorExtension(nameKey, businessOwnerName));

@@ -18,7 +18,7 @@ public class TripRepositoryImpl implements TripRepositoryExt {
 
 	@Override
 	public TripBooking countByMedallionAndPickUpDate(String medallion, Date pickUpDate) {
-		Query query = entityManager.createNativeQuery(
+		var query = entityManager.createNativeQuery(
 				"select count(1) from cab_trip_data where medallion = ? and DATE(pickup_datetime) = ?");
 		query.setParameter(1, medallion);
 		query.setParameter(2, pickUpDate);

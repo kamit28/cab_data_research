@@ -44,14 +44,15 @@ swagger:
   license_url: http://www.apache.org/licenses/LICENSE-2.0
 
 ---
-spring.profiles: local
+spring:
+  profiles: local
 
 # Mysql configurations
 datasource:
   driverClassName: com.mysql.cj.jdbc.Driver
   url: jdbc:mysql://localhost:3306/ny_cabs?useUnicode=true&characterEncoding=UTF8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-  username: user
-  password: password
+  username: amit
+  password: daz9noSa!
 
 # Redis configurations
 redis:
@@ -65,17 +66,18 @@ redis:
     max-idle: 8
     min-idle: 0
   timeout: 0
-  
+
 # JPA
-jpa:
-  database: MYSQL
-  show-sql: true
-  hibernate:
-    ddl-auto: create-drop
-  database-platform: MYSQL
-  properties:
+  jpa:
+    database: MYSQL
+    show-sql: true
     hibernate:
-      dialect: org.hibernate.dialect.MySQL5Dialect
+      ddl-auto: create-drop
+    database-platform: MYSQL
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+
 ---
 logging:
   pattern:

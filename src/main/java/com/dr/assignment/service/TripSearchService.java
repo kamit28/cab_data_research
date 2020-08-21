@@ -29,7 +29,7 @@ public class TripSearchService {
 
 	public List<TripBooking> search(List<TripBooking> bookings, boolean useCache) {
 
-		List<TripBooking> trips = new ArrayList<>(bookings.size());
+		var trips = new ArrayList<TripBooking>(bookings.size());
 
 		for (TripBooking booking : bookings) {
 			final var key = "search_" + booking.getMedallion() + "_" + booking.getPickUpDate().getTime();
@@ -41,7 +41,7 @@ public class TripSearchService {
 				resultBooking = operations.get(key);
 				log.debug("search() : cache booking >> " + resultBooking.toString());
 			} else {
-				Optional<TripBooking> result = Optional.ofNullable(
+				var result = Optional.ofNullable(
 						repository.countByMedallionAndPickUpDate(booking.getMedallion(), booking.getPickUpDate()));
 				if (result.isPresent()) {
 					resultBooking = result.get();
