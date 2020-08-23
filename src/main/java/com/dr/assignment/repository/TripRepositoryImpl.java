@@ -4,7 +4,6 @@ import java.util.Date;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 import org.springframework.stereotype.Component;
 
@@ -23,7 +22,7 @@ public class TripRepositoryImpl implements TripRepositoryExt {
 		query.setParameter(1, medallion);
 		query.setParameter(2, pickUpDate);
 		int count = ((Number) query.getSingleResult()).intValue();
-		return new TripBooking(null, medallion, null, count);
+		return new TripBooking(null, medallion, pickUpDate, count);
 	}
 
 }

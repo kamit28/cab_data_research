@@ -2,6 +2,8 @@ package com.dr.assignment.model;
 
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,7 +16,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
-public class TripSearchResponse {
+@EqualsAndHashCode(callSuper = false)
+public class TripSearchResponse extends RepresentationModel<TripSearchResponse> {
 	List<TripBooking> trips;
 }
