@@ -2,7 +2,10 @@
 __Description__
 
 This application provides the REST API end-points to analyze NY cab trips.<br>
-
+<p>
+The application uses MySql database and Redis cache and the data used in the application can be found
+in the file data/ny_cab_data_cab_trip_data_full.sql
+</p>
 The application provides following four end-points:<br>
  > 1. /search?useCache={useCache}<br>
  	- url: ``http://localhost:8080/ny_trips/search?useCache=true``<br>
@@ -10,13 +13,14 @@ The application provides following four end-points:<br>
  		``http://localhost:8080/ny_trips/search?useCache=false``<br>
  	The request parameter 'usecache' determines that the data will be pulled from cache (useCache=true) or the database (useCache=false)<br>
  	- Method: POST <br>
+ 	- Description: Pulls the number of trips for each medallion and pickupDate in the request. <br>
  	- Sample request JSON:<br>
  	
 ```
 {
  "tripBookings":[
     {
-        "medallion": "08B8CD4A3E1A0804F67F9B4328411987",
+        "medallion": "C8A5E5002322D46E2D6CB3477B4FC465",
         "pickUpDate": "2013-12-06"
     }
 ]}
@@ -44,6 +48,7 @@ The application provides following four end-points:<br>
  > 2. /{medallion}/trips?tripDate={tripDate}&useCache={useCache}<br>
  	- url: ``http://localhost:8080/ny_trips/{medallion}/trips?tripsDate={tripDate}&useCache={useCache}``<br>
  	- Method: GET<br>
+ 	- Description: Pulls the details of the booking for the requested medallion and pickupDate. <br>
  	- Sample Request: ``http://localhost:8080/ny_trips/C8A5E5002322D46E2D6CB3477B4FC465/trips?tripDate=2013-12-06&useCache=true``<br>
  	- Sample Response JSON: 
  	
@@ -76,6 +81,7 @@ The application provides following four end-points:<br>
  > 3. /trip/{id}?useCache={useCache}<br>
  	- url: ``http://localhost:8080/ny_trips/trip/{id}?&useCache={useCache}``<br>
  	- Method: GET <br>
+ 	- Description: Pulls the trip details for the given trip ID. <br>
  	- Sample Request: ``http://localhost:8080/ny_trips/trip/70497?useCache=true``<br>
  	- Sample Response JSON: 
  	
