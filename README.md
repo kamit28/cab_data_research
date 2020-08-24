@@ -3,12 +3,13 @@ __Description__
 
 This application provides the REST API end-points to analyze NY cab trips.<br>
 
-The application provides following two end-points:<br>
+The application provides following four end-points:<br>
  > 1. /search?useCache={useCache}<br>
  	- url: ``http://localhost:8080/ny_trips/search?useCache=true``<br>
  	or
- 		``http://localhost:8080/ny_trips/search?useCache=false``
- 	The request parameter 'usecache' determines that the data will be pulled from cache (useCache=true) or the database (useCache=false)
+ 		``http://localhost:8080/ny_trips/search?useCache=false``<br>
+ 	The request parameter 'usecache' determines that the data will be pulled from cache (useCache=true) or the database (useCache=false)<br>
+ 	- Method: POST <br>
  	- Sample request JSON:<br>
  	
 ```
@@ -25,17 +26,76 @@ The application provides following two end-points:<br>
 	
 ```
 {
-"trips": [
-    {
-        "medallion": "08B8CD4A3E1A0804F67F9B4328411987",
-        "numTrips": 1
-    }
-]
+    "trips": [
+        {
+            "medallion": "C8A5E5002322D46E2D6CB3477B4FC465",
+            "pickUpDate": "2013-12-06",
+            "numTrips": 2,
+            "_links": {
+                "self": {
+                    "href": "http://localhost:8080/ny_trips/C8A5E5002322D46E2D6CB3477B4FC465/trips?tripDate=2013-12-06&useCache=true"
+                }
+            }
+        }
+    ]
 }
 ```
-	
- > 2. /admin/flushCache<br>
- 	- url: ``http://localhost:8080/ny_trips/admin/flushCache``
+
+ > 2. /{medallion}/trips?tripDate={tripDate}&useCache={useCache}<br>
+ 	- url: ``http://localhost:8080/ny_trips/{medallion}/trips?tripsDate={tripDate}&useCache={useCache}``<br>
+ 	- Method: GET<br>
+ 	- Sample Request: ``http://localhost:8080/ny_trips/C8A5E5002322D46E2D6CB3477B4FC465/trips?tripDate=2013-12-06&useCache=true``<br>
+ 	- Sample Response JSON: 
+ 	
+```{
+    "trips": [
+        {
+            "medallion": "C8A5E5002322D46E2D6CB3477B4FC465",
+            "pickUpDate": "2013-12-06",
+            "numTrips": 0,
+            "_links": {
+                "self": {
+                    "href": "http://localhost:8080/ny_trips/trip/70497?useCache=true"
+                }
+            }
+        },
+        {
+            "medallion": "C8A5E5002322D46E2D6CB3477B4FC465",
+            "pickUpDate": "2013-12-06",
+            "numTrips": 0,
+            "_links": {
+                "self": {
+                    "href": "http://localhost:8080/ny_trips/trip/73458?useCache=true"
+                }
+            }
+        }
+    ]
+}
+```
+ 	
+ > 3. /trip/{id}?useCache={useCache}<br>
+ 	- url: ``http://localhost:8080/ny_trips/trip/{id}?&useCache={useCache}``<br>
+ 	- Method: GET <br>
+ 	- Sample Request: ``http://localhost:8080/ny_trips/trip/70497?useCache=true``<br>
+ 	- Sample Response JSON: 
+ 	
+```{
+    "id": 73458,
+    "medallion": "C8A5E5002322D46E2D6CB3477B4FC465",
+    "hackLicence": "-73.97245",
+    "vendorId": "VTS",
+    "rateCode": 1,
+    "storeAndForwardFlag": "-73.97435",
+    "pickupDateTime": "2013-12-06T08:23:00.000+00:00",
+    "dropoffDateTime": "2013-12-06T08:36:00.000+00:00",
+    "passengerCount": 6,
+    "tripTimeInSeconds": 780,
+    "tripDistance": 1.19
+}
+```
+ 	
+ > 4. /admin/flushCache<br>
+ 	- url: ``http://localhost:8080/ny_trips/admin/flushCache`` <br>
  	<p>
  	This API requires HTTP Basic Authentication<br>
  	The username is: admin<br>
@@ -46,7 +106,7 @@ __Build__
 <br>To build the executable Jar, run the following maven command in the project root directory:<br>
 ``$ mvn clean package``
 
-It will create a jar cab_data_client.jar in <project root>/target directory.<br>
+It will create a jar cab_data_research.jar in <project root>/target directory.<br>
 
 __Run__
 Make sure that:
@@ -54,4 +114,5 @@ Make sure that:
 > 2. Redis Server is up and running
 
 <br>To run the program:<br>
+
 ``$ mvn spring-boot:run``
