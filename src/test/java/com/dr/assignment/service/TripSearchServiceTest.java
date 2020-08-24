@@ -3,10 +3,10 @@ package com.dr.assignment.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +23,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
+import com.dr.assignment.dto.TripBookingDto;
 import com.dr.assignment.model.TripBooking;
 import com.dr.assignment.repository.TripRepository;
 
@@ -30,10 +31,10 @@ import com.dr.assignment.repository.TripRepository;
 public class TripSearchServiceTest {
 
 	@Mock
-	RedisTemplate<String, TripBooking> bookingCache;
+	RedisTemplate<String, Object> bookingCache;
 
 	@Mock
-	private ValueOperations<String, TripBooking> valueOperations;
+	private ValueOperations<String, Object> valueOperations;
 
 	@Mock
 	private TripRepository repository;
@@ -55,7 +56,7 @@ public class TripSearchServiceTest {
 		Date date = formatter.parse(dateInString);
 		bookings.add(new TripBooking(null, "abcd", date, 0));
 
-		when(repository.countByMedallionAndPickUpDate("abcd", date)).thenReturn(new TripBooking(1L, "abcd", date, 3));
+		when(repository.countByMedallionAndPickUpDate("abcd", date)).thenReturn(new TripBookingDto(1L, "abcd", date, 3));
 		doNothing().when(valueOperations).set(anyString(), any());
 
 		List<TripBooking> result = service.search(bookings, false);
@@ -82,7 +83,7 @@ public class TripSearchServiceTest {
 		when(bookingCache.hasKey(key)).thenReturn(true);
 		when(bookingCache.opsForValue()).thenReturn(valueOperations);
 
-		when(repository.countByMedallionAndPickUpDate("abcd", date)).thenReturn(new TripBooking(1L, "abcd", date, 3));
+		when(repository.countByMedallionAndPickUpDate("abcd", date)).thenReturn(new TripBookingDto(1L, "abcd", date, 3));
 		doNothing().when(valueOperations).set(anyString(), any());
 
 		List<TripBooking> result = service.search(bookings, false);
@@ -108,7 +109,7 @@ public class TripSearchServiceTest {
 
 		when(bookingCache.hasKey(key)).thenReturn(true);
 		when(bookingCache.opsForValue()).thenReturn(valueOperations);
-		when(valueOperations.get(key)).thenReturn(new TripBooking(1L, "abcd", date, 3));
+		when(valueOperations.get(key)).thenReturn(new TripBookingDto(1L, "abcd", date, 3));
 
 		List<TripBooking> result = service.search(bookings, true);
 

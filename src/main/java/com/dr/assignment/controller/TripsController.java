@@ -69,7 +69,7 @@ public class TripsController {
 		
 		log.info("Request received for trips of medallion: {} on date: {} and usecache: {}", medallion, tripDate, useCache);
 		
-		var tripBookings = tripSearchService.tripDetails(medallion, formatter.parse(tripDate), useCache);
+		var tripBookings = tripSearchService.getTrips(medallion, formatter.parse(tripDate), useCache);
 		tripBookings.forEach(booking -> {
 			try {
 				booking.add(linkTo(methodOn(TripsController.class).getTrip(booking.getId(), useCache)).withSelfRel());

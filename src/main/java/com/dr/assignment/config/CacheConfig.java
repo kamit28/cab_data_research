@@ -8,10 +8,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-
-import com.dr.assignment.model.TripBooking;
 
 import lombok.Data;
 import redis.clients.jedis.Jedis;
@@ -43,12 +41,12 @@ public class CacheConfig {
 	}
 
 	@Bean
-	public RedisTemplate<String, TripBooking> redisTemplate() {
-		final var redisTemplate = new RedisTemplate<String, TripBooking>();
+	public RedisTemplate<String, Object> redisTemplate() {
+		final var redisTemplate = new RedisTemplate<String, Object>();
 		redisTemplate.setConnectionFactory(redisConnectionFactory());
 		redisTemplate.setEnableTransactionSupport(true);
 		redisTemplate.setKeySerializer(new StringRedisSerializer());
-		redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<TripBooking>(TripBooking.class));
+		redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
 		return redisTemplate;
 	}
 

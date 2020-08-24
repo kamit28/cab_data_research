@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -22,8 +24,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString
+@JsonRootName(value = "TripBookingDto")
 public class TripBooking extends RepresentationModel<TripBooking> {
 
+	@JsonIgnore
 	private Long id;
 
 	@NotEmpty(message = "medallion can not be null or empty")
