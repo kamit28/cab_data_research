@@ -6,17 +6,17 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.2.RELEASE</version>
+		<version>2.5.2</version>
 		<relativePath />
 	</parent>
-	<groupId>com.optus.codereview</groupId>
+	<groupId>com.dr.assignment</groupId>
 	<artifactId>cab_data_researcher</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>cab_data_researcher</name>
-	<description>APIs tp provide insights on the open data about NY cab trips</description>
+	<description>APIs to provide insights on the open data about NY cab trips</description>
 
 	<properties>
-		<java.version>14</java.version>
+		<java.version>17</java.version>
 	</properties>
 
 	<dependencies>
@@ -71,6 +71,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>1.18.22</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -115,6 +116,16 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<mainClass>com.dr.assignment.TripsApplication</mainClass>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -1,0 +1,63 @@
+version: '3.9'
+services:
+  redis-server:
+    image: 'redis:alpine'
+    container_name: redis
+    networks:
+      - trip-redis
+    healthcheck:
+      test: redis-cli ping
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  cloud-mysql:
+    image: 'mysql:latest'
+    env_file:
+      - .env
+    ports:
+      - "${MYSQL_OUT_PORT}:${MYSQL_IN_PORT}"
+    container_name: trip-db
+    hostname: cloud-mysql
+    restart: always
+    networks:
+      - trip-mysql
+    cap_add:
+      - SYS_NICE
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ~/apps/mysql:/var/lib/mysql
+      - ./privileges.sql:/docker-entrypoint-initdb.d/privileges.sql:ro
+      - ./data_min/min_dump.sql:/docker-entrypoint-initdb.d/min_dump.sql:ro
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u amit --password=Passw0rd!
+      interval: 20s
+      timeout: 5s
+      retries: 10
+  api:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - '8081:8080'
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+    networks:
+      - trip-mysql
+      - trip-redis
+    depends_on:
+      redis-server:
+        condition: service_healthy
+      cloud-mysql:
+        condition: service_healthy
+volumes:
+  db:
+networks:
+  trip-mysql:
+  trip-redis:

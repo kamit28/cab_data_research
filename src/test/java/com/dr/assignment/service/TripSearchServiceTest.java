@@ -1,8 +1,8 @@
 package com.dr.assignment.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -14,20 +14,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.dr.assignment.dto.TripBookingDto;
 import com.dr.assignment.model.TripBooking;
 import com.dr.assignment.repository.TripRepository;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(SpringExtension.class)
 public class TripSearchServiceTest {
 
 	@Mock
@@ -44,7 +44,7 @@ public class TripSearchServiceTest {
 
 	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		when(bookingCache.opsForValue()).thenReturn(valueOperations);
 	}

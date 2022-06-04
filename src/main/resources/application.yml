@@ -1,26 +1,43 @@
-server.port: 8080
-server.error.include-stacktrace: never
-server.servlet:
-  context-path: /ny_trips
-  compression:
-    enabled: true
-    mime-types: application/json,application/error+json
----
-spring:
-  profiles:
-    active: local
-  jackson:
-    default-property-inclusion: NON_NULL
-    serialization:
-      write_dates_as_timestamps: false
-      fail-on-empty-beans: false
-    deserialization:
-      FAIL_ON_UNKNOWN_PROPERTIES: false
 server:
+  port: 8080
+  error:
+    include-stacktrace: never
+  servlet:
+    context-path: /ny_trips
   tomcat:
     basedir: .
     accesslog:
       directory: logs
+---
+spring:
+  config:
+    activate:
+      on-profile: ${SPRING_PROFILES_ACTIVE:local}
+  jpa:
+    database: MYSQL
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  jackson:
+    default-property-inclusion: NON_NULL
+    serialization:
+      write-dates-as-timestamps: false
+      fail-on-empty-beans: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+---
+logging:
+  pattern:
+    console: "%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n"
+    file: "%d %-5level [%thread] %logger{0} : %msg%n"
+  level:
+    root: INFO
+    com.dr.assignment: INFO
+    org.springframework.web: INFO
+    org:
+      hibernate.SQL: INFO
 
 ---
 swagger:
@@ -45,14 +62,14 @@ swagger:
 
 ---
 spring:
-  profiles: local
-
-# Mysql configurations
-datasource:
-  driverClassName: com.mysql.cj.jdbc.Driver
-  url: jdbc:mysql://localhost:3306/ny_cabs?useUnicode=true&characterEncoding=UTF8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-  username: amit
-  password: daz9noSa!
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ny_trips?useUnicode=true&characterEncoding=UTF8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&enabledTLSProtocols=TLSv1.2
+    username: amit
+    password: Passw0rd!
 
 # Redis configurations
 redis:
@@ -60,33 +77,41 @@ redis:
   host: 127.0.0.1
   port: 6379
   password:
-  pool:
+  jedis.pool:
     max-active: 1000
     max-wait: -1
     max-idle: 8
     min-idle: 0
   timeout: 0
 
-# JPA
+---
+spring:
+  config:
+    activate:
+      on-profile: cloud
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://cloud-mysql/ny_trips?useUnicode=true&characterEncoding=UTF8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    username: amit
+    password: Passw0rd!
   jpa:
     database: MYSQL
     show-sql: true
-    hibernate:
-      ddl-auto: create-drop
     database-platform: MYSQL
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
-
----
-logging:
-  pattern:
-    console: "%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n"
-    file: "%d %-5level [%thread] %logger{0} : %msg%n"
-  level:
-    root: INFO
-    com.dr.assignment: DEBUG
-    org.springframework.web: INFO
-    org:
-      hibernate.SQL: DEBUG
- 
+  sql:
+    init:
+      platform: mysql
+redis:
+  database: 0
+  host: redis
+  port: 6379
+  password:
+  jedis.pool:
+    max-active: 1000
+    max-wait: -1
+    max-idle: 8
+    min-idle: 0
+  timeout: 0

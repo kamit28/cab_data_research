@@ -115,6 +115,9 @@ __Build__
 It will create a jar cab_data_research.jar in <project root>/target directory.<br>
 
 __Run__
+
+__Local run__
+
 Make sure that:
 > 1. MySql Server is up and running. Also make sure that the database ny_cabs is created on the DB server and table cab_trip_data has been loaded from the SQL dump file.
 > 2. Redis Server is up and running
@@ -122,3 +125,18 @@ Make sure that:
 <br>To run the program:<br>
 
 ``$ mvn spring-boot:run``
+
+<br>
+
+__Docker run__
+
+<strong>Note:</strong> The tomcat port has been set to 8081. If you want to change that, edit the api port in docker-compose file.<br>
+
+> To build containers and run them<br>
+``$ docker-compose up --build``
+
+> To just run the already build containers<br>
+``$ docker-compose up``
+
+> To stop the containers<br>
+``$ docker-compose down``

@@ -1,8 +1,8 @@
 package com.dr.assignment.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -29,7 +29,7 @@ public class TripControllerTest {
 
 	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		service = mock(TripSearchService.class);
 		controller = new TripsController(service);
