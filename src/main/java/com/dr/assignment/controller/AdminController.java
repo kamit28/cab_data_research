@@ -1,5 +1,7 @@
 package com.dr.assignment.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,14 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dr.assignment.service.AdminService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
 	private AdminService adminService;
 
+	private static final Logger log = LoggerFactory.getLogger(AdminController.class);
+	
 	@Autowired
 	public AdminController(AdminService adminService) {
 		this.adminService = adminService;

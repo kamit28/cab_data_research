@@ -8,10 +8,11 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +43,7 @@ public class TripSearchServiceTest {
 	@InjectMocks
 	private TripSearchService service;
 
-	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	@BeforeEach
 	public void setUp() {
@@ -53,19 +54,21 @@ public class TripSearchServiceTest {
 	public void search_db_access_success() throws ParseException {
 		List<TripBooking> bookings = new ArrayList<>();
 		String dateInString = "2013-12-06";
-		Date date = formatter.parse(dateInString);
+		LocalDate date = LocalDate.parse(dateInString, formatter);
 		bookings.add(new TripBooking(null, "abcd", date, 0));
 
-		when(repository.countByMedallionAndPickUpDate("abcd", date)).thenReturn(new TripBookingDto(1L, "abcd", date, 3));
+		when(repository.countByMedallionAndPickUpDate("abcd",
+				Timestamp.valueOf(LocalDate.parse(dateInString).atStartOfDay())))
+				.thenReturn(new TripBookingDto(1L, "abcd", date.atStartOfDay(), 3));
 		doNothing().when(valueOperations).set(anyString(), any());
 
-		List<TripBooking> result = service.search(bookings, false);
+		List<TripBookingDto> result = service.search(bookings, false);
 
 		assertNotNull(result);
 		assertEquals(1, result.size());
 		assertTrue(result.get(0).getId() == 1L);
 		assertTrue(result.get(0).getMedallion().equals("abcd"));
-		assertTrue(result.get(0).getPickUpDate().equals(date));
+		assertTrue(result.get(0).getPickUpDateTime().equals(date.atStartOfDay()));
 		assertTrue(result.get(0).getNumTrips() == 3);
 	}
 
@@ -73,26 +76,28 @@ public class TripSearchServiceTest {
 	public void search_cache_access_success() throws ParseException {
 		List<TripBooking> bookings = new ArrayList<>();
 		String dateInString = "2013-12-06";
-		Date date = formatter.parse(dateInString);
+		LocalDate date = LocalDate.parse(dateInString, formatter);
 
 		TripBooking booking = new TripBooking(null, "abcd", date, 0);
 
 		bookings.add(booking);
-		var key = "search_" + booking.getMedallion() + "_" + booking.getPickUpDate().getTime();
+		var key = "search_" + booking.getMedallion() + "_" + booking.getPickUpDate();
 
 		when(bookingCache.hasKey(key)).thenReturn(true);
 		when(bookingCache.opsForValue()).thenReturn(valueOperations);
 
-		when(repository.countByMedallionAndPickUpDate("abcd", date)).thenReturn(new TripBookingDto(1L, "abcd", date, 3));
+		when(repository.countByMedallionAndPickUpDate("abcd",
+				Timestamp.valueOf(LocalDate.parse(dateInString, formatter).atStartOfDay())))
+				.thenReturn(new TripBookingDto(1L, "abcd", date.atStartOfDay(), 3));
 		doNothing().when(valueOperations).set(anyString(), any());
 
-		List<TripBooking> result = service.search(bookings, false);
+		List<TripBookingDto> result = service.search(bookings, false);
 
 		assertNotNull(result);
 		assertEquals(1, result.size());
 		assertTrue(result.get(0).getId() == 1L);
 		assertTrue(result.get(0).getMedallion().equals("abcd"));
-		assertTrue(result.get(0).getPickUpDate().equals(date));
+		assertTrue(result.get(0).getPickUpDateTime().equals(date.atStartOfDay()));
 		assertTrue(result.get(0).getNumTrips() == 3);
 	}
 
@@ -100,24 +105,24 @@ public class TripSearchServiceTest {
 	public void search_useCach_success() throws ParseException {
 		List<TripBooking> bookings = new ArrayList<>();
 		String dateInString = "2013-12-06";
-		Date date = formatter.parse(dateInString);
+		LocalDate date = LocalDate.parse(dateInString, formatter);
 
 		TripBooking booking = new TripBooking(null, "abcd", date, 0);
 
 		bookings.add(booking);
-		var key = "search_" + booking.getMedallion() + "_" + booking.getPickUpDate().getTime();
+		var key = "search_" + booking.getMedallion() + "_" + booking.getPickUpDate();
 
 		when(bookingCache.hasKey(key)).thenReturn(true);
 		when(bookingCache.opsForValue()).thenReturn(valueOperations);
-		when(valueOperations.get(key)).thenReturn(new TripBookingDto(1L, "abcd", date, 3));
+		when(valueOperations.get(key)).thenReturn(new TripBookingDto(1L, "abcd", date.atStartOfDay(), 3));
 
-		List<TripBooking> result = service.search(bookings, true);
+		List<TripBookingDto> result = service.search(bookings, true);
 
 		assertNotNull(result);
 		assertEquals(1, result.size());
 		assertTrue(result.get(0).getId() == 1L);
 		assertTrue(result.get(0).getMedallion().equals("abcd"));
-		assertTrue(result.get(0).getPickUpDate().equals(date));
+		assertTrue(result.get(0).getPickUpDateTime().equals(date.atStartOfDay()));
 		assertTrue(result.get(0).getNumTrips() == 3);
 	}
 }

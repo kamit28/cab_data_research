@@ -1,117 +1,94 @@
 server:
-  port: 8080
-  error:
-    include-stacktrace: never
-  servlet:
-    context-path: /ny_trips
-  tomcat:
-    basedir: .
-    accesslog:
-      directory: logs
+   port: 8080
+   error:
+      include-stacktrace: never
+   servlet:
+      context-path: /
+   tomcat:
+      basedir: .
+      accesslog:
+         directory: logs
 ---
 spring:
-  config:
-    activate:
-      on-profile: ${SPRING_PROFILES_ACTIVE:local}
-  jpa:
-    database: MYSQL
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
-  jackson:
-    default-property-inclusion: NON_NULL
-    serialization:
-      write-dates-as-timestamps: false
-      fail-on-empty-beans: false
-    deserialization:
-      fail-on-unknown-properties: false
+   config:
+      activate:
+         on-profile: ${SPRING_PROFILES_ACTIVE:local}
+   jpa:
+      database: MYSQL
+      show-sql: true
+      properties:
+         hibernate:
+            dialect: org.hibernate.dialect.MySQLDialect
+            type.json_format_mapper: com.dr.assignment.config.JacksonConfig
+   jackson:
+      default-property-inclusion: NON_NULL
+      serialization:
+         write-dates-as-timestamps: false
+         fail-on-empty-beans: false
+      deserialization:
+         fail-on-unknown-properties: false
 
 ---
 logging:
-  pattern:
-    console: "%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n"
-    file: "%d %-5level [%thread] %logger{0} : %msg%n"
-  level:
-    root: INFO
-    com.dr.assignment: INFO
-    org.springframework.web: INFO
-    org:
-      hibernate.SQL: INFO
-
----
-swagger:
-  host: localhost
-  protocols:
-    - http
-    - https
-  api_title: NY Trips API
-  api_description: Api Documentation for NY Trips API
-  api_version: v1
-  terms_of_service_url: 
-  business_owner_key: x-businessOwner
-  technical_owner_key: x-technicalOwner
-  name_key: name
-  email_key: email
-  business_owner_name: Amit Kumar
-  business_owner_email: kamit28@gmail.com
-  technical_owner_name: Amit Kumar
-  technical_owner_email: kamit28@gmail.com
-  license: Apache 2.0
-  license_url: http://www.apache.org/licenses/LICENSE-2.0
+   pattern:
+      console: '%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n'
+      file: '%d %-5level [%thread] %logger{0} : %msg%n'
+   level:
+      root: INFO
+      com.dr.assignment: DEBUG
+      org.springframework.web: INFO
+      org:
+         hibernate.SQL: DEBUG
 
 ---
 spring:
-  config:
-    activate:
-      on-profile: local
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ny_trips?useUnicode=true&characterEncoding=UTF8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&enabledTLSProtocols=TLSv1.2
-    username: amit
-    password: Passw0rd!
+   config:
+      activate:
+         on-profile: local
+   datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/ny_trips?useUnicode=true&characterEncoding=UTF8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&enabledTLSProtocols=TLSv1.2
+      username: amit
+      password: Passw0rd!
 
-# Redis configurations
-redis:
-  database: 0
-  host: 127.0.0.1
-  port: 6379
-  password:
-  jedis.pool:
-    max-active: 1000
-    max-wait: -1
-    max-idle: 8
-    min-idle: 0
-  timeout: 0
+   data.redis:
+      database: 0
+      host: 127.0.0.1
+      port: 6379
+      password: null
+      jedis.pool:
+         max-active: 1000
+         max-wait: -1
+         max-idle: 8
+         min-idle: 0
+      timeout: 0
 
 ---
 spring:
-  config:
-    activate:
-      on-profile: cloud
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://cloud-mysql/ny_trips?useUnicode=true&characterEncoding=UTF8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-    username: amit
-    password: Passw0rd!
-  jpa:
-    database: MYSQL
-    show-sql: true
-    database-platform: MYSQL
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
-  sql:
-    init:
-      platform: mysql
-redis:
-  database: 0
-  host: redis
-  port: 6379
-  password:
-  jedis.pool:
-    max-active: 1000
-    max-wait: -1
-    max-idle: 8
-    min-idle: 0
-  timeout: 0
+   config:
+      activate:
+         on-profile: cloud
+   datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://cloud-mysql/ny_trips?useUnicode=true&characterEncoding=UTF8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      username: amit
+      password: Passw0rd!
+   jpa:
+      database: MYSQL
+      show-sql: true
+      database-platform: MYSQL
+      properties: null
+   sql:
+      init:
+         platform: mysql
+   data.redis:
+      database: 0
+      host: redis
+      port: 6379
+      password: null
+      jedis.pool:
+         max-active: 1000
+         max-wait: -1
+         max-idle: 8
+         min-idle: 0
+      timeout: 00000

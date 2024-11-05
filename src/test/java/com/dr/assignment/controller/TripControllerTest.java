@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.dr.assignment.dto.TripBookingDto;
 import com.dr.assignment.model.TripBooking;
 import com.dr.assignment.model.TripSearchRequest;
 import com.dr.assignment.model.TripSearchResponse;
@@ -27,7 +28,7 @@ public class TripControllerTest {
 
 	private TripsController controller;
 
-	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	@BeforeEach
 	public void setUp() {
@@ -37,19 +38,18 @@ public class TripControllerTest {
 
 	@Test
 	public void search_success() throws Exception {
-		TripSearchRequest request = new TripSearchRequest();
+		TripSearchRequest request = new TripSearchRequest(List.of());
 
 		String dateInString = "2013-12-06";
-		Date date = formatter.parse(dateInString);
-		request.setTripBookings(new ArrayList<>());
+		LocalDate date = LocalDate.parse(dateInString, formatter);
 		TripBooking bookingRequest = new TripBooking(null, "abcd", date, 0);
-		request.getTripBookings().add(bookingRequest);
+		request = new TripSearchRequest(List.of(bookingRequest));
 
-		TripBooking bookingResponse = new TripBooking(105L, "abcd", date, 3);
-		List<TripBooking> bookings = new ArrayList<>();
+		var bookingResponse = new TripBookingDto(105L, "abcd", date.atStartOfDay(), 3);
+		List<TripBookingDto> bookings = new ArrayList<>();
 		bookings.add(bookingResponse);
 
-		when(service.search(request.getTripBookings(), false)).thenReturn(bookings);
+		when(service.search(request.tripBookings(), false)).thenReturn(bookings);
 
 		ResponseEntity<TripSearchResponse> response = controller.search(request, false);
 
